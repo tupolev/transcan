@@ -3,56 +3,56 @@
   <file datatype="plaintext" original="file.ext" source-language="en-DEV" target-language="en-DEV">
     <body>
       <trans-unit id="1">
-        <source>{{ 'pages.dashboard.item.backside.link.view_details' | trans }}</source>
-        <target>{{ 'pages.dashboard.item.backside.link.view_details' | trans }}</target>
+        <source>pages.dashboard.item.backside.link.view_details</source>
+        <target>pages.dashboard.item.backside.link.view_details</target>
       </trans-unit>
       <trans-unit id="2">
-        <source>{{ 'pages.dashboard.item.backside.link.goto_fanpage' | trans }}</source>
-        <target>{{ 'pages.dashboard.item.backside.link.goto_fanpage' | trans }}</target>
+        <source>pages.dashboard.item.backside.link.goto_fanpage</source>
+        <target>pages.dashboard.item.backside.link.goto_fanpage</target>
       </trans-unit>
       <trans-unit id="3">
-        <source>_('FB login successful')</source>
-        <target>_('FB login successful')</target>
+        <source>_(FBloginsuccessful)</source>
+        <target>_(FBloginsuccessful)</target>
       </trans-unit>
       <trans-unit id="4">
-        <source>_('tokens.details.refresh.errors.message_title')</source>
-        <target>_('tokens.details.refresh.errors.message_title')</target>
+        <source>tokens.details.refresh.errors.message_title</source>
+        <target>tokens.details.refresh.errors.message_title</target>
       </trans-unit>
       <trans-unit id="5">
-        <source>_('global.ok')</source>
-        <target>_('global.ok')</target>
+        <source>global.ok</source>
+        <target>global.ok</target>
       </trans-unit>
       <trans-unit id="6">
-        <source>_('tokens.details.refresh.errors.please_refresh')</source>
-        <target>_('tokens.details.refresh.errors.please_refresh')</target>
+        <source>tokens.details.refresh.errors.please_refresh</source>
+        <target>tokens.details.refresh.errors.please_refresh</target>
       </trans-unit>
       <trans-unit id="7">
-        <source>_('tokens.details.refresh.confirmations.generic_title')</source>
-        <target>_('tokens.details.refresh.confirmations.generic_title')</target>
+        <source>tokens.details.refresh.confirmations.generic_title</source>
+        <target>tokens.details.refresh.confirmations.generic_title</target>
       </trans-unit>
       <trans-unit id="8">
-        <source>_('tokens.details.refresh.confirmations.successfully_refreshed')</source>
-        <target>_('tokens.details.refresh.confirmations.successfully_refreshed')</target>
+        <source>tokens.details.refresh.confirmations.successfully_refreshed</source>
+        <target>tokens.details.refresh.confirmations.successfully_refreshed</target>
       </trans-unit>
       <trans-unit id="9">
-        <source>_('tokens.details.refresh.confirmations.n_tokens_reactivated')</source>
-        <target>_('tokens.details.refresh.confirmations.n_tokens_reactivated')</target>
+        <source>tokens.details.refresh.confirmations.n_tokens_reactivated</source>
+        <target>tokens.details.refresh.confirmations.n_tokens_reactivated</target>
       </trans-unit>
       <trans-unit id="10">
-        <source>_('tokens.details.refresh.errors.authorization_cancelled')</source>
-        <target>_('tokens.details.refresh.errors.authorization_cancelled')</target>
+        <source>tokens.details.refresh.errors.authorization_cancelled</source>
+        <target>tokens.details.refresh.errors.authorization_cancelled</target>
       </trans-unit>
       <trans-unit id="11">
-        <source>_('tokens.details.refresh.errors.login_cancelled')</source>
-        <target>_('tokens.details.refresh.errors.login_cancelled')</target>
+        <source>tokens.details.refresh.errors.login_cancelled</source>
+        <target>tokens.details.refresh.errors.login_cancelled</target>
       </trans-unit>
       <trans-unit id="12">
-        <source>_('posts.hide.warning.title')</source>
-        <target>_('posts.hide.warning.title')</target>
+        <source>posts.hide.warning.title</source>
+        <target>posts.hide.warning.title</target>
       </trans-unit>
       <trans-unit id="13">
-        <source>_('posts.hide.warning.message')</source>
-        <target>_('posts.hide.warning.message')</target>
+        <source>posts.hide.warning.message</source>
+        <target>posts.hide.warning.message</target>
       </trans-unit>
     </body>
   </file>
