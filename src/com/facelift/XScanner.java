@@ -1,7 +1,5 @@
 package com.facelift;
 
-import sun.misc.Regexp;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,16 +9,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XScanner {
-    protected List<Regexp> patternList;
+    protected List<Pattern> patternList;
     protected List<String> fileList;
     protected List<String> outputList;
 
 
-    public List<Regexp> getPatternList() {
+    public List<Pattern> getPatternList() {
         return patternList;
     }
 
-    public void setPatternList(List<Regexp> patternList) {
+    public void setPatternList(List<Pattern> patternList) {
         this.patternList = patternList;
     }
 
@@ -41,46 +39,60 @@ public class XScanner {
         this.outputList = outputList;
     }
 
+    public XScanner addToOutputList(String item) {
+        if (!outputList.contains(item)) {
+            outputList.add(item);
+        }
+        return this;
+    }
+
     public XScanner() {
 
     }
 
-    public XScanner startEngine(List<String> fileList, List<Regexp> patternList) throws Exception{
+    public XScanner startEngine(List<String> fileList, List<Pattern> patternList) throws Exception {
         if (patternList.size() == 0) {
             throw new Exception();
         }
         this.setFileList(fileList);
         this.setPatternList(patternList);
+        this.setOutputList(new ArrayList<String>());
         return this;
     }
 
     private void loopThroughFiles() throws Exception {
         Iterator<String> fileIterator = getFileList().iterator();
         while (fileIterator.hasNext()) {
-            String fileContent = new Scanner(new File(fileIterator.next())).useDelimiter("\\Z").next();
+            String fileItem = fileIterator.next();
+            String fileContent = new Scanner(new File(fileItem)).useDelimiter("\\Z").next();
             loopThroughPatterns(fileContent);
         }
     }
 
     private void loopThroughPatterns(String fileContent) throws Exception {
-        Iterator<Regexp> patIterator = getPatternList().iterator();
+        Iterator<Pattern> patIterator = getPatternList().iterator();
         while (patIterator.hasNext()) {
-            addMatchesListToOutputList(fileScan(fileContent, patIterator.next()));
+            Pattern pattern = patIterator.next();
+            addMatchesListToOutputList(fileScan(fileContent, pattern));
         }
     }
 
-    private List<String> fileScan(String fileContent, Regexp pattern) throws Exception {
+    private List<String> fileScan(String fileContent, Pattern pattern) throws Exception {
         List<String> allMatches = new ArrayList<String>();
-        Matcher m = Pattern.compile(pattern.toString())
-                .matcher(fileContent);
+        Matcher m = pattern.matcher(fileContent);
         while (m.find()) {
-            allMatches.add(m.group());
+            if (!allMatches.contains(m.group())) {
+                allMatches.add(m.group());
+            }
         }
         return allMatches;
     }
 
-    private boolean addMatchesListToOutputList(List<String> matchesList) throws Exception {
-        return getOutputList().addAll(matchesList);
+    private void addMatchesListToOutputList(List<String> matchesList) throws Exception {
+        Iterator<String> it = matchesList.iterator();
+        while (it.hasNext()) {
+            addToOutputList(it.next());
+        }
     }
 
     public void doMagic() throws Exception {

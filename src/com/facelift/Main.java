@@ -1,19 +1,18 @@
 package com.facelift;
 
-import sun.misc.Regexp;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
 
 public class Main {
 
     public static void main(String[] args){
-        if (args.length < 3) {
+        if (args.length < 2) {
             System.out.println("Error: missing arguments");
             return;
         }
-        String rootDir = (args.length > 2) ? args[1] : ".";
-        String outFileName = (args.length > 2) ? args[3] : "file.xlf";
+        String rootDir = (args.length > 1) ? args[0] : ".";
+        String outFileName = (args.length > 1) ? args[1] : "file.xlf";
 
         try {
             //load file extensions
@@ -21,20 +20,17 @@ public class Main {
             String fileExtensions = "php,js,html";
             //create pattern list
             //TODO load patterns from config file
-            ArrayList<Regexp> patternList = new ArrayList<Regexp>();
-            patternList.add(0,new Regexp("(\\{\\{)(\\s*)(\\\"|\\')(.+)(\\\"|\\')(\\s*)(\\|)(\\s*)trans(\\s*)(\\}\\})"));
-            patternList.add(1,new Regexp("_\\((\\'|\\\")(.+)(\\'|\\\")\\)"));
+            ArrayList<Pattern> patternList = new ArrayList<Pattern>();
+            patternList.add(0, Pattern.compile("(\\{\\{)(\\s*)(\\\"|\\')(.+)(\\\"|\\')(\\s*)(\\|)(\\s*)trans(\\s*)(\\}\\})"));
+            patternList.add(1, Pattern.compile("_\\((\\'|\\\")(.+)(\\'|\\\")\\)"));
             //load files to a list
             FileScanner fscanner = new FileScanner(rootDir,fileExtensions);
-            List<String> fileList = fscanner.scanFileList();
             //start xscanner engine
             XScanner scanner = new XScanner();
-            List<String> outList = null;
-            scanner.startEngine(fileList, patternList).doMagic();
-            outList = scanner.getOutputList();
+            scanner.startEngine(fscanner.scanFileList(), patternList).doMagic();
             //dump results to xliff
             Xliff xliff = new Xliff();
-            xliff.loadStrings(outList).dumpToFile(outFileName);
+            xliff.loadStrings(scanner.getOutputList()).dumpToFile(outFileName);
         } catch (Exception e) {
             e.printStackTrace();
         }

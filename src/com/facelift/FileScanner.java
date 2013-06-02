@@ -1,8 +1,7 @@
 package com.facelift;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 
 public class FileScanner {
 
@@ -15,6 +14,17 @@ public class FileScanner {
     }
 
     protected List<String> fileList;
+
+    public List<String> getOutFileList() {
+        return outFileList;
+    }
+
+    public void setOutFileList(List<String> outFileList) {
+        this.outFileList = outFileList;
+    }
+
+    protected List<String> outFileList;
+
     protected String rootDir;
     protected List<String> fileExtensions;
 
@@ -35,12 +45,39 @@ public class FileScanner {
     }
 
     public FileScanner(String rootDir, String fileExtensions) {
+        this.outFileList = new ArrayList<String>();
         this.setRootDir(rootDir);
         this.setFileExtensions(Arrays.asList(fileExtensions.split(",")));
     }
 
 
     public List<String> scanFileList() {
-        return null;
+        String nam = getRootDir();
+        File aFile = new File(nam);
+        Process("", aFile);
+        return getOutFileList();
+    }
+
+    public void Process(String spcs, File aFile) {
+        if(aFile.isFile()) {
+            List<String> extensions = getFileExtensions();
+            Iterator it = extensions.iterator();
+            while (it.hasNext()) {
+                String obj = (String)it.next();
+                if (aFile.getName().endsWith(obj)) {
+                    getOutFileList().add(getOutFileList().size(),aFile.getAbsolutePath());
+                }
+            }
+        } else if (aFile.isDirectory()) {
+            File[] listOfFiles = aFile.listFiles();
+            if(listOfFiles!=null) {
+                for (int i = 0; i < listOfFiles.length; i++)
+                    Process(spcs + " ", listOfFiles[i]);
+            }
+        }
     }
 }
+
+
+
+
