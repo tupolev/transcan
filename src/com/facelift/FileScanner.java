@@ -5,30 +5,15 @@ import java.util.*;
 
 public class FileScanner {
 
-    public List<String> getFileList() {
-        return fileList;
-    }
-
-    public void setFileList(List<String> fileList) {
-        this.fileList = fileList;
-    }
-
-    protected List<String> fileList;
-
-    public List<String> getOutFileList() {
-        return outFileList;
-    }
-
-    public void setOutFileList(List<String> outFileList) {
-        this.outFileList = outFileList;
-    }
-
     protected List<String> outFileList;
-
     protected String rootDir;
     protected List<String> fileExtensions;
 
-    public String getRootDir() {
+    private List<String> getOutFileList() {
+        return outFileList;
+    }
+
+    private String getRootDir() {
         return rootDir;
     }
 
@@ -49,7 +34,6 @@ public class FileScanner {
         this.setRootDir(rootDir);
         this.setFileExtensions(Arrays.asList(fileExtensions.split(",")));
     }
-
 
     public List<String> scanFileList() {
         String nam = getRootDir();

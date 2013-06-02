@@ -19,29 +19,30 @@ import java.util.List;
 
 public class Xliff {
 
-    public List<String> getStringsList() {
+    protected List<String> stringsList;
+    protected String outputFileName;
+
+    private List<String> getStringsList() {
         return stringsList;
     }
 
-    public void setStringsList(List<String> stringsList) {
+    private void setStringsList(List<String> stringsList) {
         this.stringsList = stringsList;
     }
 
-    public String getOutputFileName() {
+    private String getOutputFileName() {
         return outputFileName;
     }
 
-    public void setOutputFileName(String outputFileName) {
+    private void setOutputFileName(String outputFileName) {
         this.outputFileName = outputFileName;
     }
-
-    protected List<String> stringsList;
-    protected String outputFileName;
 
     public Xliff loadStrings(List<String> strings) {
         setStringsList(strings);
         return this;
     }
+
     public boolean dumpToFile(String fileName) {
         setOutputFileName(fileName);
         boolean result = true;

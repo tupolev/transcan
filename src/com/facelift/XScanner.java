@@ -9,9 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XScanner {
+    protected List<Pattern> outputPatternList;
+    protected List<String> fileList;
+    protected List<String> outputList;
     protected List<Pattern> inputPatternList;
 
-    public List<Pattern> getInputPatternList() {
+    private List<Pattern> getInputPatternList() {
         return inputPatternList;
     }
 
@@ -19,17 +22,13 @@ public class XScanner {
         this.inputPatternList = inputPatternList;
     }
 
-    public List<Pattern> getOutputPatternList() {
+    private List<Pattern> getOutputPatternList() {
         return outputPatternList;
     }
 
     public void setOutputPatternList(List<Pattern> outputPatternList) {
         this.outputPatternList = outputPatternList;
     }
-
-    protected List<Pattern> outputPatternList;
-    protected List<String> fileList;
-    protected List<String> outputList;
 
     public List<String> getFilteredOutputList() {
         for(int i=0; i<getOutputList().size(); i++) {
@@ -51,11 +50,11 @@ public class XScanner {
         return getOutputList();
     }
 
-    public List<String> getFileList() {
+    private List<String> getFileList() {
         return fileList;
     }
 
-    public void setFileList(List<String> fileList) {
+    private void setFileList(List<String> fileList) {
         this.fileList = fileList;
     }
 
@@ -67,15 +66,11 @@ public class XScanner {
         this.outputList = outputList;
     }
 
-    public XScanner addToOutputList(String item) {
+    private XScanner addToOutputList(String item) {
         if (!outputList.contains(item)) {
             outputList.add(item);
         }
         return this;
-    }
-
-    public XScanner() {
-
     }
 
     public XScanner startEngine(List<String> fileList, List<Pattern> inputPatternList, List<Pattern> outputPatternList) throws Exception {
