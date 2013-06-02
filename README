@@ -1,1 +1,58 @@
-This file was created by IntelliJ IDEA 12.1.3 for binding GitHub repository
+Main idea (sorry, spanish. It came in a late night moment :P)
+
+--
+
+Inputs:
+
+- Un directorio (con subdirectorios) que contiene ficheros
+
+- Una lista de extensiones de fichero para filtrar la estructura de directorios
+
+- Una lista de expresiones regulares que buscar en cada tipo de fichero
+
+Outputs:
+
+-Un fichero XLIFF básico válido (los ID de sus trans unit son unívocos) cuyos trans-unit sean, cada uno, el contenido de cada matching de las expresiones regulares, replicados en el <source> y el <target> (ver definición de XLIFF).
+
+Este fichero será considerado el maestro y será usado para subirlo a webtranslate.it y obtener las réplicas traducidas a los diferentes “locales”.
+
+Por ahora, el alcance se limita a generar el xliff básico maestro. Existe una herramienta para sincronizar con la plataforma remota. Lo necesario es un sistema para “cosechar” las cadenas traducibles de todos los ficheros susceptibles de contenerlas en un proyecto.
+
+---
+
+Workflow básico:
+
+-Crear lista de salida vacía
+
+-Para cada directorio D
+
+    -Obtener la lista de ficheros filtrados en ese directorio.
+
+    -Para cada fichero filtrado
+
+        -Obtener lista de regexp para ese tipo de fichero
+
+        -Para cada patrón regexp
+
+            -Escanear el fichero en busca de matchings
+
+            -Para cada matching
+
+                -Extraer la cadena y añadirla a la lista de salida
+
+-Para cada resultado almacenado en la lista de salida
+
+    -Crear la estructura:
+
+        <trans-unit id=”<autonumeric>”>
+
+            <source>cadena.de.la.lista</source>
+
+            <target>cadena.de.la.lista</target>
+
+</trans-unit>
+
+-Añadirla al árbol XLIFF
+-Volcar el árbol xliff al fichero de salida loquesea.en-DEV.xlf
+
+--
