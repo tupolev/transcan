@@ -83,4 +83,7 @@ public class XScanner {
         return getOutputList().addAll(matchesList);
     }
 
+    public void doMagic() throws Exception {
+        loopThroughFiles();
+    }
 }
