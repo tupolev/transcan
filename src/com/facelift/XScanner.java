@@ -1,10 +1,7 @@
 package com.facelift;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,9 +84,14 @@ public class XScanner {
     private void loopThroughFiles() throws Exception {
         Iterator<String> fileIterator = getFileList().iterator();
         while (fileIterator.hasNext()) {
-            String fileItem = fileIterator.next();
-            String fileContent = new Scanner(new File(fileItem)).useDelimiter("\\Z").next();
-            loopThroughPatterns(fileContent);
+            try {
+                String fileItem = fileIterator.next();
+                String fileContent = new Scanner(new File(fileItem)).useDelimiter("\0").next();
+                System.out.print(fileContent+ "\n");
+                loopThroughPatterns(fileContent);
+            } catch (NoSuchElementException e) {
+                continue;
+            }
         }
     }
 

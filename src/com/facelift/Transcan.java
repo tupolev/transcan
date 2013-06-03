@@ -4,7 +4,7 @@ package com.facelift;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class Main {
+public class Transcan {
 
     public static void main(String[] args){
         if (args.length < 2) {
