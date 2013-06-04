@@ -35,10 +35,10 @@ public class XScanner {
             while (it.hasNext()) {
                 pattern = it.next();
                 Matcher m = pattern.matcher(item);
-                System.out.println(m.pattern().toString());
+                //System.out.println(m.pattern().toString());
                 if (m.find()) {
                     item = m.group();
-                    System.out.println(m.group());
+                    //System.out.println(m.group());
                 }
             }
             item = item.replace("'","").replace('"',' ').replace(" ","");
@@ -86,8 +86,8 @@ public class XScanner {
         while (fileIterator.hasNext()) {
             try {
                 String fileItem = fileIterator.next();
+                System.out.println("Scanning file: " + fileItem);
                 String fileContent = new Scanner(new File(fileItem)).useDelimiter("\0").next();
-                System.out.print(fileContent+ "\n");
                 loopThroughPatterns(fileContent);
             } catch (NoSuchElementException e) {
                 continue;

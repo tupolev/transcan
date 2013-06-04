@@ -23,9 +23,10 @@ public class Transcan {
             ArrayList<Pattern> inputPatternList , outputFilterPatternList;
             inputPatternList = new ArrayList<Pattern>();
             outputFilterPatternList = new ArrayList<Pattern>();
-            inputPatternList.add(0, Pattern.compile("(\\{\\{)(\\s*)(\\\"|\\')(.+)(\\\"|\\')(\\s*)(\\|)(\\s*)trans(\\s*)(\\}\\})"));
-            inputPatternList.add(1, Pattern.compile("_\\((\\'|\\\")(.+)(\\'|\\\")\\)"));
-            outputFilterPatternList.add(0, Pattern.compile("\\'((\\w|\\.){3,})\\'"));
+//            inputPatternList.add(0, Pattern.compile("(\\{\\{)(\\s*)(\\\"|\\')(.+)(\\\"|\\')(\\s*)(\\|)(\\s*)trans(\\s*)(\\}\\})"));
+//            inputPatternList.add(1, Pattern.compile("_\\((\\'|\\\")(.+)(\\'|\\\")\\)"));
+            inputPatternList.add(0, Pattern.compile("[\\'|\\\"]([\\w|\\.]{3,})[\\'|\\\"]"));
+            outputFilterPatternList.add(0, Pattern.compile("[\\'|\\\"]([\\w|\\.]{3,})[\\'|\\\"]"));
             //load files to a list
             FileScanner fscanner = new FileScanner(rootDir,fileExtensions);
             //start xscanner engine
