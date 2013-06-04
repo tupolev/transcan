@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+    <input-pattern>([\{\{][\s*][\"|\'])(.+)([\"|\'][\s*][\|][\s*]trans[\s*][\}\}])</input-pattern>
+    <input-pattern>(_\([\'|\"])(.+)([\'|\"]\))</input-pattern>
+    <included-file-extensions>php,js,html</included-file-extensions>
+    <excluded-file-extensions>yml,txt,rst,xml</excluded-file-extensions>
+    <included-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources</included-directory>
+    <included-directory>/home/manuel/src/tlm-backend.localhost/trunk/src</included-directory>
+    <excluded-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/Bootstrap</excluded-directory>
+    <output-file>/home/manuel/src/transcan/prueba.xlf</output-file>
+</config>

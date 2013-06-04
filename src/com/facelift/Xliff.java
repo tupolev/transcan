@@ -70,6 +70,7 @@ public class Xliff {
 
             Iterator<String> itemsIterator = getStringsList().iterator();
 
+
             for (int i=1, siz = getStringsList().size(); (itemsIterator.hasNext() && i< siz); i++ ) {
                 String item = itemsIterator.next();
                 // trans-unit elements

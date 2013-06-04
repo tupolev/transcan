@@ -35,13 +35,10 @@ public class XScanner {
             while (it.hasNext()) {
                 pattern = it.next();
                 Matcher m = pattern.matcher(item);
-                //System.out.println(m.pattern().toString());
                 if (m.find()) {
-                    item = m.group();
-                    //System.out.println(m.group());
+                    item = m.group(0);
                 }
             }
-            item = item.replace("'","").replace('"',' ').replace(" ","");
             getOutputList().set(i, item);
         }
         return getOutputList();
@@ -106,9 +103,10 @@ public class XScanner {
     private List<String> fileScan(String fileContent, Pattern pattern) throws Exception {
         List<String> allMatches = new ArrayList<String>();
         Matcher m = pattern.matcher(fileContent);
+
         while (m.find()) {
-            if (!allMatches.contains(m.group())) {
-                allMatches.add(m.group());
+            if (!allMatches.contains(m.group(2))) {
+                allMatches.add(m.group(2));
             }
         }
         return allMatches;

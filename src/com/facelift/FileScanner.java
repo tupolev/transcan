@@ -6,53 +6,56 @@ import java.util.*;
 public class FileScanner {
 
     protected List<String> outFileList;
-    protected String rootDir;
-    protected List<String> fileExtensions;
+
+    public XConfig getConfig() {
+        return config;
+    }
+
+    protected XConfig config;
 
     private List<String> getOutFileList() {
         return outFileList;
     }
 
-    private String getRootDir() {
-        return rootDir;
-    }
-
-    public void setRootDir(String rootDir) {
-        this.rootDir = rootDir;
-    }
-
-    public List<String> getFileExtensions() {
-        return fileExtensions;
-    }
-
-    public void setFileExtensions(List<String> fileExtensions) {
-        this.fileExtensions = fileExtensions;
-    }
-
-    public FileScanner(String rootDir, String fileExtensions) {
+    public FileScanner(XConfig config) {
+        this.setConfig(config);
         this.outFileList = new ArrayList<String>();
-        this.setRootDir(rootDir);
-        this.setFileExtensions(Arrays.asList(fileExtensions.split(",")));
+    }
+
+    private void setConfig(XConfig config) {
+        this.config = config;
+    }
+
+    private boolean directoryIsExcluded(String dir) {
+        return getConfig().getExcludedDirectories().contains(dir);
+    }
+
+    private boolean extensionIsExcluded(String ext) {
+        return getConfig().getExcludedFileExtensions().contains(ext);
     }
 
     public List<String> scanFileList() {
-        String nam = getRootDir();
-        File aFile = new File(nam);
-        Process("", aFile);
+        for (String goodDir : getConfig().getIncludedDirectories()) {
+            if (!directoryIsExcluded(goodDir)) {
+                String nam = goodDir;
+                File aFile = new File(nam);
+                Process("", aFile);
+            }
+        }
         return getOutFileList();
     }
 
     public void Process(String spcs, File aFile) {
         if(aFile.isFile()) {
-            List<String> extensions = getFileExtensions();
+            List<String> extensions = getConfig().getIncludedFileExtensions();
             Iterator it = extensions.iterator();
             while (it.hasNext()) {
                 String obj = (String)it.next();
-                if (aFile.getName().endsWith(obj)) {
+                if (!extensionIsExcluded(obj) && aFile.getName().endsWith(obj)) {
                     getOutFileList().add(getOutFileList().size(),aFile.getAbsolutePath());
                 }
             }
-        } else if (aFile.isDirectory()) {
+        } else if (aFile.isDirectory() && !directoryIsExcluded(aFile.getAbsolutePath())) {
             File[] listOfFiles = aFile.listFiles();
             if(listOfFiles!=null) {
                 for (int i = 0; i < listOfFiles.length; i++)
