@@ -6,40 +6,39 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XScanner {
-    protected List<Pattern> outputPatternList;
+    protected List<FocusedPattern> outputPatternList;
     protected List<String> fileList;
     protected List<String> outputList;
-    protected List<Pattern> inputPatternList;
+    protected List<FocusedPattern> inputPatternList;
 
-    private List<Pattern> getInputPatternList() {
+    private List<FocusedPattern> getInputPatternList() {
         return inputPatternList;
     }
 
-    public void setInputPatternList(List<Pattern> inputPatternList) {
+    public void setInputPatternList(List<FocusedPattern> inputPatternList) {
         this.inputPatternList = inputPatternList;
     }
 
-    private List<Pattern> getOutputPatternList() {
+    private List<FocusedPattern> getOutputPatternList() {
         return outputPatternList;
     }
 
-    public void setOutputPatternList(List<Pattern> outputPatternList) {
+    public void setOutputPatternList(List<FocusedPattern> outputPatternList) {
         this.outputPatternList = outputPatternList;
     }
 
     public List<String> getFilteredOutputList() {
         for(int i=0; i<getOutputList().size(); i++) {
             String item = getOutputList().get(i);
-            Pattern pattern = null;
-            Iterator<Pattern> it = getOutputPatternList().iterator();
-            while (it.hasNext()) {
+            FocusedPattern pattern = null;
+            Iterator<FocusedPattern> it = getOutputPatternList().iterator();
+	        List<String> matches = new ArrayList<String>();
+	        while (it.hasNext()) {
                 pattern = it.next();
-                Matcher m = pattern.matcher(item);
-                if (m.find()) {
-                    item = m.group(0);
-                }
-            }
-            getOutputList().set(i, item);
+	            matches = pattern.matchAndCapture(item);
+		        getOutputList().addAll(matches);
+	        }
+
         }
         return getOutputList();
     }
@@ -67,7 +66,8 @@ public class XScanner {
         return this;
     }
 
-    public XScanner startEngine(List<String> fileList, List<Pattern> inputPatternList, List<Pattern> outputPatternList) throws Exception {
+    public XScanner startEngine(List<String> fileList, List<FocusedPattern> inputPatternList,
+                                List<FocusedPattern> outputPatternList) throws Exception {
         if (inputPatternList.size() == 0) {
             throw new Exception();
         }
@@ -83,7 +83,7 @@ public class XScanner {
         while (fileIterator.hasNext()) {
             try {
                 String fileItem = fileIterator.next();
-                System.out.println("Scanning file: " + fileItem);
+//                System.out.println("Scanning file: " + fileItem);
                 String fileContent = new Scanner(new File(fileItem)).useDelimiter("\0").next();
                 loopThroughPatterns(fileContent);
             } catch (NoSuchElementException e) {
@@ -93,23 +93,15 @@ public class XScanner {
     }
 
     private void loopThroughPatterns(String fileContent) throws Exception {
-        Iterator<Pattern> patIterator = getInputPatternList().iterator();
+        Iterator<FocusedPattern> patIterator = getInputPatternList().iterator();
         while (patIterator.hasNext()) {
-            Pattern pattern = patIterator.next();
+            FocusedPattern pattern = patIterator.next();
             addMatchesListToOutputList(fileScan(fileContent, pattern));
         }
     }
 
-    private List<String> fileScan(String fileContent, Pattern pattern) throws Exception {
-        List<String> allMatches = new ArrayList<String>();
-        Matcher m = pattern.matcher(fileContent);
-
-        while (m.find()) {
-            if (!allMatches.contains(m.group(2))) {
-                allMatches.add(m.group(2));
-            }
-        }
-        return allMatches;
+    private List<String> fileScan(String fileContent, FocusedPattern pattern) throws Exception {
+        return pattern.matchAndCapture(fileContent);
     }
 
     private void addMatchesListToOutputList(List<String> matchesList) throws Exception {

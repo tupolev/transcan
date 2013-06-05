@@ -11,8 +11,8 @@ public class Transcan {
             XScanner scanner = new XScanner();
             scanner.startEngine(fscanner.scanFileList(), config.getInputPatterns(), config.getOutputPatterns()).doMagic();
             //dump results to xliff
-            Xliff xliff = new Xliff();
-            xliff.loadStrings(scanner.getFilteredOutputList()).dumpToFile(config.getOutputFile());
+            Xliff xliff = new Xliff(config);
+            xliff.loadStrings(scanner.getFilteredOutputList()).dumpToFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
