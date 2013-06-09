@@ -1,184 +1,92 @@
 package com.facelift;
 
-import java.io.File;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 public class Xliff {
 
-    private List<String> stringsList, outputPrefixes;
-    private String outputFileName, outputDirectory, defaultOutputPrefix;
-	private boolean outputMultipleFiles;
-	private String outputFileSuffix;
-	private ArrayList<String> processedItems;
+    private File file;
+    private Document tree;
 
-	private List<String> getStringsList() {
-        return stringsList;
+    public Xliff() {
+
     }
 
-    private void setStringsList(List<String> stringsList) {
-        this.stringsList = stringsList;
+    public Xliff(String file) {
+        setFile(new File(file));
     }
 
-    private String getOutputFileName() {
-        return outputFileName;
+    public Xliff(File file) {
+        setFile(file);
     }
 
-    private void setOutputFileName(String outputFileName) {
-        this.outputFileName = outputFileName;
+    public void parseFile(String xfile) throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        setTree(docBuilder.parse(new File(xfile)));
+        getTree().getDocumentElement().normalize();
+        System.out.println(getTree().getDocumentElement().getTagName().toString() + " tree loaded");
     }
 
-	private List<String> getOutputPrefixes() {
-		return outputPrefixes;
-	}
-
-	private void setOutputPrefixes(List<String> outputPrefixes) {
-		this.outputPrefixes = outputPrefixes;
-	}
-
-	private String getDefaultOutputPrefix() {
-		return defaultOutputPrefix;
-	}
-
-	private void setDefaultOutputPrefix(String defaultOutputPrefix) {
-		this.defaultOutputPrefix = defaultOutputPrefix;
-	}
-
-	private String getOutputDirectory() {
-		return outputDirectory;
-	}
-
-	private void setOutputDirectory(String outputDirectory) {
-		this.outputDirectory = outputDirectory;
-	}
-
-	private boolean isOutputMultipleFiles() {
-		return outputMultipleFiles;
-	}
-
-	private void setOutputMultipleFiles(boolean outputMultipleFiles) {
-		this.outputMultipleFiles = outputMultipleFiles;
-	}
-
-	public String getOutputFileSuffix() {
-		return outputFileSuffix;
-	}
-
-	public void setOutputFileSuffix(String outputFileSuffix) {
-		this.outputFileSuffix = outputFileSuffix;
-	}
-
-	public Xliff(XConfig config) {
-		setOutputMultipleFiles(config.isOutputMultiFile());
-		setOutputDirectory(config.getOutputDirectory());
-		setDefaultOutputPrefix(config.getDefaultOutputPrefix());
-		setOutputPrefixes(config.getOutputPrefixes());
-		setOutputFileSuffix(config.getOutputFileSuffix());
-	}
-
-	public Xliff loadStrings(List<String> strings) {
-        setStringsList(strings);
-        return this;
+    public void parseFile(File xfile) {
+        setFile(xfile);
     }
 
-	public boolean dumpToFile() {
-		this.setProcessedItems(new ArrayList<String>());
-		boolean result = true;
-		try {
-			for (String prefix : this.getOutputPrefixes()) {
-				processForPrefix(prefix, getStringsList().listIterator(0));
-			}
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-			result = false;
-		} catch (TransformerException tfe) {
-			tfe.printStackTrace();
-			result = false;
-		}
+    public File getFile() {
+        return file;
+    }
 
-		return result;
-	}
+    public void setFile(File file) {
+        this.file = file;
+    }
 
-	private void processForPrefix(String prefix, ListIterator<String> itemsIterator) throws TransformerException,
-			ParserConfigurationException {
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = null;
-		docBuilder = docFactory.newDocumentBuilder();
-		// root elements
-		Document doc = docBuilder.newDocument();
-		Element xliffElement = doc.createElement("xliff");
-		//version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"
-		xliffElement.setAttribute("version", "1.2");
-		xliffElement.setAttribute("xmlns", "urn:oasis:names:tc:xliff:document:1.2");
-		doc.appendChild(xliffElement);
-		//source-language="en-DEV" datatype="plaintext" original="file.ext" target-language="en-DEV"
-		Element fileElement = doc.createElement("file");
-		fileElement.setAttribute("source-language", "en-DEV");
-		fileElement.setAttribute("target-language", "en-DEV");
-		fileElement.setAttribute("datatype", "plaintext");
-		fileElement.setAttribute("original", "file.ext");
-		xliffElement.appendChild(fileElement);
+    public void setTree(Document tree) {
+        this.tree = tree;
+    }
 
-		Element bodyElement = doc.createElement("body");
-		fileElement.appendChild(bodyElement);
+    public Document getTree() {
+        return tree;
+    }
 
-		for (int i = 1, siz = getStringsList().size(); (itemsIterator.hasNext() && i < siz); i++) {
-			String item = itemsIterator.next();
-			if (item.startsWith(prefix + ".") || (prefix.compareTo(this.getDefaultOutputPrefix()) == 0) && !this
-					.getProcessedItems().contains(item)) {
-				// trans-unit elements
-				Element transUnit = doc.createElement("trans-unit");
-				transUnit.setAttribute("id", String.valueOf(i));
-				// source element
-				Element source = doc.createElement("source");
-				source.appendChild(doc.createTextNode(item));
-				transUnit.appendChild(source);
-				// target element
-				Element target = doc.createElement("target");
-				target.appendChild(doc.createTextNode(item));
-				transUnit.appendChild(target);
-				bodyElement.appendChild(transUnit);
-				this.getProcessedItems().add(item);
-			}
-		}
-		// write the content into xml file
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		DOMSource source = new DOMSource(doc);
-		String fileAbsPath = this.getOutputDirectory();
-		fileAbsPath += (this.getOutputDirectory().endsWith(File.separator)) ? "" : File.separator;
-		fileAbsPath += prefix;
-		fileAbsPath += this.getOutputFileSuffix();
-		StreamResult sresult = new StreamResult(System.out);
-		if (fileAbsPath.compareTo("") != 0) {
-			sresult = new StreamResult(new File(fileAbsPath));
-		}
-		transformer.transform(source, sresult);
-		System.out.println("File " + fileAbsPath + " " + "saved!");
-	}
+    public NodeList getTransUnitList() throws XPathExpressionException {
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xPath = factory.newXPath();
+        NodeList result = (NodeList) xPath.evaluate("/trans-unit",
+                getTree().getDocumentElement().getFirstChild(), XPathConstants.NODESET);
+        return result;
+    }
 
-	public ArrayList<String> getProcessedItems() {
-		return processedItems;
-	}
+    public Node getTransUnitByID(Integer id) throws XPathExpressionException {
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xPath = factory.newXPath();
+        Node result = (Node) xPath.evaluate("/trans-unit/source/@id=" + id.toString(),
+                getTree().getDocumentElement().getFirstChild(), XPathConstants.NODE);
+        return result;
+    }
 
-	public void setProcessedItems(ArrayList<String> processedItems) {
-		this.processedItems = processedItems;
-	}
+    public HashMap<String,String> getListFromTransUnit(Node transUnit) throws XPathExpressionException {
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xPath = factory.newXPath();
+        HashMap<String,String> list = new HashMap<String,String>();
+        list.put("id",(String) xPath.evaluate("@id", transUnit.getFirstChild(), XPathConstants.STRING));
+        list.put("source",(String) xPath.evaluate("source", transUnit.getFirstChild(), XPathConstants.STRING));
+        list.put("target",(String) xPath.evaluate("target", transUnit.getFirstChild(), XPathConstants.STRING));
+        return list;
+
+    }
 }

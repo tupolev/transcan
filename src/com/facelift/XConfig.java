@@ -22,8 +22,10 @@ public class XConfig {
 	private List<String> includedFileExtensions, excludedFileExtensions,includedDirectories,excludedDirectories;
 	private List<FocusedPattern> inputPatterns,outputPatterns;
 	private String outputFileSuffix;
+    private String masterFileDirectory;
+    private String masterFileSuffix;
 
-	public String getOutputFile() {
+    public String getOutputFile() {
         return outputFile;
     }
 
@@ -119,6 +121,23 @@ public class XConfig {
 		this.outputFileSuffix = outputFileSuffix;
 	}
 
+
+    public String getMasterFileDirectory() {
+        return masterFileDirectory;
+    }
+
+    public void setMasterFileDirectory(String masterFileDirectory) {
+        this.masterFileDirectory = masterFileDirectory;
+    }
+
+    public String getMasterFileSuffix() {
+        return masterFileSuffix;
+    }
+
+    public void setMasterFileSuffix(String masterFileSuffix) {
+        this.masterFileSuffix = masterFileSuffix;
+    }
+
 	public XConfig() throws Exception {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -188,8 +207,8 @@ public class XConfig {
 		if (tags.getLength() == 0) throw new Exception("No output single file property configured");
 		setOutputFile(tags.item(0).getFirstChild().getNodeValue());
 
-		tags = doc.getElementsByTagName("output-directory");
-		if (tags.getLength() == 0) throw new Exception("No output directory configured");
+		tags = doc.getElementsByTagName("output-tmp-directory");
+		if (tags.getLength() == 0) throw new Exception("No output tmp directory configured");
 		setOutputDirectory(tags.item(0).getFirstChild().getNodeValue());
 
 		tags = doc.getElementsByTagName("output-file-suffix");
@@ -205,5 +224,14 @@ public class XConfig {
 				setDefaultOutputPrefix(tags.item(i).getFirstChild().getNodeValue().toString());
 			}
 		}
-	}
+
+        tags = doc.getElementsByTagName("master-file-directory");
+        if (tags.getLength() == 0) throw new Exception("No master file directory configured");
+        setMasterFileDirectory(tags.item(0).getFirstChild().getNodeValue());
+
+        tags = doc.getElementsByTagName("master-file-suffix");
+        if (tags.getLength() == 0) throw new Exception("No master file suffix configured");
+        setMasterFileSuffix(tags.item(0).getFirstChild().getNodeValue());
+
+    }
 }
