@@ -14,7 +14,9 @@ import javax.xml.transform.stream.StreamResult;
 import com.sun.javafx.geom.Vec3d;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -30,8 +32,9 @@ public class XliffEngine {
     private String masterFileDirectory;
     private String masterFileSuffix;
     private List<Xliff> masterFilesList;
+	private Xliff defaultMasterFile;
 
-    private List<String> getStringsList() {
+	private List<String> getStringsList() {
         return stringsList;
     }
 
@@ -112,6 +115,7 @@ public class XliffEngine {
     }
 
     public XliffEngine(XConfig config) {
+	    setMasterFilesList(new ArrayList<Xliff>());
         setOutputMultipleFiles(config.isOutputMultiFile());
         setOutputDirectory(config.getOutputDirectory());
         setDefaultOutputPrefix(config.getDefaultOutputPrefix());
@@ -204,22 +208,36 @@ public class XliffEngine {
 		System.out.println("File " + fileAbsPath + " " + "saved!");
 	}
 
-    public void loadMasterFiles() {
-        File masterDir = new File(getMasterFileDirectory());
-        if (masterDir.isDirectory()) {
-            File[] listOfFiles = masterDir.listFiles();
-            if(listOfFiles!=null) {
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    if (listOfFiles[i].getAbsolutePath().endsWith(getMasterFileSuffix())) {
-                        loadMasterFile(listOfFiles[i]);
-                    }
-                }
-            }
-        }
+	public XliffEngine loadMasterFiles() throws ParserConfigurationException, SAXException, IOException {
+		List<String> prefixes = getOutputPrefixes();
+		String suffix = getMasterFileSuffix();
+		String dir = getMasterFileDirectory();
+		if (new File(dir).isDirectory()) {
+	        File masterFile;
+	        for(String prefix : prefixes) {
+		        masterFile = new File(dir.concat(File.separator).concat(prefix).concat(suffix));
+		        if (masterFile.getName().startsWith(getDefaultOutputPrefix() + ".")) {
+			        loadDefaultMasterFile(masterFile);
+		        } else {
+			        loadMasterFile(masterFile);
+		        }
+	        }
+        } else {
+			System.out.println("ERROR: Master directory " + dir + " does not exist.");
+		}
+	    return this;
     }
 
-    private void loadMasterFile(File masterFile) {
-        this.getMasterFilesList().add(new Xliff(masterFile));
+	private void loadDefaultMasterFile(File masterFile) throws IOException, SAXException, ParserConfigurationException {
+		String[] prefix = masterFile.getName().split("\\.");
+		Xliff file = new Xliff(masterFile, prefix[0]);
+		this.setDefaultMasterFile(file.parse());
+	}
+
+	private void loadMasterFile(File masterFile) throws IOException, SAXException, ParserConfigurationException {
+	    String[] prefix = masterFile.getName().split("\\.");
+		Xliff file = new Xliff(masterFile, prefix[0]);
+	    this.getMasterFilesList().add(file.parse());
     }
 
     public List<Xliff> getMasterFilesList() {
@@ -229,4 +247,12 @@ public class XliffEngine {
     public void setMasterFilesList(List<Xliff> masterFilesList) {
         this.masterFilesList = masterFilesList;
     }
+
+	public void setDefaultMasterFile(Xliff defaultMasterFile) {
+		this.defaultMasterFile = defaultMasterFile;
+	}
+
+	public Xliff getDefaultMasterFile() {
+		return defaultMasterFile;
+	}
 }

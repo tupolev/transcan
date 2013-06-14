@@ -17,6 +17,6 @@
     <output-prefix>credentials</output-prefix>
     <output-prefix default="true">other</output-prefix>
     <output-file-suffix>.en-DEV.xlf</output-file-suffix>
-    <master-file-directory>/home/manuel/src/tlm-backend.localhost/trunk/src/Facelift/tlmSyngularBundle/Resources/translations/</master-file-directory>
+    <master-file-directory>/home/manuel/src/transcan</master-file-directory>
     <master-file-suffix>.en-DEV.xlf</master-file-suffix>
 </config>
