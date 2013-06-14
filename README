@@ -1,58 +1,17 @@
-Main idea (sorry, spanish. It came in a late night moment :P)
+Transcan is a Java command line tool to gather translatable strings from source code files and dump them into XLIFF
+files.
 
---
+Features:
+-Can filter the file types to be scanned for strings
+-Can use custom patterns for scanning, stored as Regex in the config.xml file.
+-Can specify included/excluded directories to scan.
+-Can separate the translation strings into different XLIFF files, using output prefixes.
+-Can add new translation strings to existing XLIFF files, or create new files after each scan.
 
-Inputs:
+Build:
+Clone the project and build using "ant -f transcan.xml" or just download the file "transcan.jar".
 
-- Un directorio (con subdirectorios) que contiene ficheros
+Run:
+java -jar transcan.jar
 
-- Una lista de extensiones de fichero para filtrar la estructura de directorios
-
-- Una lista de expresiones regulares que buscar en cada tipo de fichero
-
-Outputs:
-
--Un fichero XLIFF básico válido (los ID de sus trans unit son unívocos) cuyos trans-unit sean, cada uno, el contenido de cada matching de las expresiones regulares, replicados en el <source> y el <target> (ver definición de XLIFF).
-
-Este fichero será considerado el maestro y será usado para subirlo a webtranslate.it y obtener las réplicas traducidas a los diferentes “locales”.
-
-Por ahora, el alcance se limita a generar el xliff básico maestro. Existe una herramienta para sincronizar con la plataforma remota. Lo necesario es un sistema para “cosechar” las cadenas traducibles de todos los ficheros susceptibles de contenerlas en un proyecto.
-
----
-
-Workflow básico:
-
--Crear lista de salida vacía
-
--Para cada directorio D
-
-    -Obtener la lista de ficheros filtrados en ese directorio.
-
-    -Para cada fichero filtrado
-
-        -Obtener lista de regexp para ese tipo de fichero
-
-        -Para cada patrón regexp
-
-            -Escanear el fichero en busca de matchings
-
-            -Para cada matching
-
-                -Extraer la cadena y añadirla a la lista de salida
-
--Para cada resultado almacenado en la lista de salida
-
-    -Crear la estructura:
-
-        <trans-unit id=”<autonumeric>”>
-
-            <source>cadena.de.la.lista</source>
-
-            <target>cadena.de.la.lista</target>
-
-</trans-unit>
-
--Añadirla al árbol XLIFF
--Volcar el árbol xliff al fichero de salida loquesea.en-DEV.xlf
-
---
+It will load the configuration from the mandatory config.xml file.

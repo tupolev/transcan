@@ -14,9 +14,9 @@
     <output-prefix>object</output-prefix>
     <output-prefix>feed</output-prefix>
     <output-prefix>page</output-prefix>
-    <output-prefix>credentials</output-prefix>
+    <output-prefix>tokens</output-prefix>
     <output-prefix default="true">other</output-prefix>
     <output-file-suffix>.en-DEV.xlf</output-file-suffix>
-    <master-file-directory>/home/manuel/src/transcan</master-file-directory>
+    <master-file-directory>/home/manuel/src/transcan/files</master-file-directory>
     <master-file-suffix>.en-DEV.xlf</master-file-suffix>
 </config>
