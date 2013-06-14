@@ -14,24 +14,12 @@ import java.util.regex.Pattern;
 public class XConfig {
     private Document doc;
     private String _configFile = "config.xml";
-    private String outputFile;
 	private List<String> outputPrefixes;
 	private String defaultOutputPrefix;
-	private String outputDirectory;
-	private boolean outputMultiFile;
 	private List<String> includedFileExtensions, excludedFileExtensions,includedDirectories,excludedDirectories;
 	private List<FocusedPattern> inputPatterns,outputPatterns;
-	private String outputFileSuffix;
     private String masterFileDirectory;
     private String masterFileSuffix;
-
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
-    }
 
     public List<String> getIncludedFileExtensions() {
         return includedFileExtensions;
@@ -96,31 +84,6 @@ public class XConfig {
 	public String getDefaultOutputPrefix() {
 		return defaultOutputPrefix;
 	}
-
-	public void setOutputDirectory(String outputDirectory) {
-		this.outputDirectory = outputDirectory;
-	}
-
-	public String getOutputDirectory() {
-		return outputDirectory;
-	}
-
-	public void setOutputMultiFile(boolean outputMultiFile) {
-		this.outputMultiFile = outputMultiFile;
-	}
-
-	public boolean isOutputMultiFile() {
-		return outputMultiFile;
-	}
-
-	public String getOutputFileSuffix() {
-		return outputFileSuffix;
-	}
-
-	public void setOutputFileSuffix(String outputFileSuffix) {
-		this.outputFileSuffix = outputFileSuffix;
-	}
-
 
     public String getMasterFileDirectory() {
         return masterFileDirectory;
@@ -198,22 +161,6 @@ public class XConfig {
 		for (int i = 0; i < tags.getLength(); i++) {
 			getExcludedDirectories().add(tags.item(i).getFirstChild().getNodeValue().toString());
 		}
-
-		tags = doc.getElementsByTagName("output-multiple-files");
-		if (tags.getLength() == 0) throw new Exception("No output multi file property configured");
-		setOutputMultiFile(Boolean.getBoolean(tags.item(0).getFirstChild().getNodeValue()));
-
-		tags = doc.getElementsByTagName("output-single-file");
-		if (tags.getLength() == 0) throw new Exception("No output single file property configured");
-		setOutputFile(tags.item(0).getFirstChild().getNodeValue());
-
-		tags = doc.getElementsByTagName("output-tmp-directory");
-		if (tags.getLength() == 0) throw new Exception("No output tmp directory configured");
-		setOutputDirectory(tags.item(0).getFirstChild().getNodeValue());
-
-		tags = doc.getElementsByTagName("output-file-suffix");
-		if (tags.getLength() == 0) throw new Exception("No output file suffix configured");
-		setOutputFileSuffix(tags.item(0).getFirstChild().getNodeValue());
 
 		tags = doc.getElementsByTagName("output-prefix");
 		setOutputPrefixes(new ArrayList<String>());

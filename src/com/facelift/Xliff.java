@@ -125,6 +125,7 @@ public class Xliff {
 			insertTransUnitNode(messageKey, messageKey);
 		} else {
 			if (updateOnExists) {
+				//TODO
 			}
 		}
 	}
@@ -165,10 +166,6 @@ public class Xliff {
 		}
 		return max;
 	}
-//
-//	private void sortNodeArrayList(List<Node>) {
-//		for()
-//	}
 
 	private void debugNodeList(List<Node> list) {
 		for(int i=0, len = list.size(); i<len; i++) {
@@ -215,9 +212,6 @@ public class Xliff {
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		DOMSource source = new DOMSource(getTree());
 		String fileAbsPath = getFile().getAbsolutePath();
-//		fileAbsPath += (getFile().getAbsolutePath().endsWith(File.separator)) ? "" : File.separator;
-//		fileAbsPath += prefix;
-//		fileAbsPath += this.getOutputFileSuffix();
 		StreamResult sresult = new StreamResult(System.out);
 		if (destination != Xliff.DEST_CONSOLE && fileAbsPath.compareTo("") != 0) {
 			sresult = new StreamResult(new File(fileAbsPath));
@@ -246,11 +240,9 @@ public class Xliff {
 		// root elements
 		Document doc = docBuilder.newDocument();
 		Element xliffElement = doc.createElement("xliff");
-		//version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"
 		xliffElement.setAttribute("version", "1.2");
 		xliffElement.setAttribute("xmlns", "urn:oasis:names:tc:xliff:document:1.2");
 		doc.appendChild(xliffElement);
-		//source-language="en-DEV" datatype="plaintext" original="file.ext" target-language="en-DEV"
 		Element fileElement = doc.createElement("file");
 		fileElement.setAttribute("source-language", "en-DEV");
 		fileElement.setAttribute("target-language", "en-DEV");

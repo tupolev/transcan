@@ -23,8 +23,9 @@ import java.util.ListIterator;
 public class XliffEngine {
 
     private List<String> stringsList, outputPrefixes;
-    private String outputFileName, outputDirectory, defaultOutputPrefix;
-	private boolean outputMultipleFiles;
+//    private String outputFileName, outputDirectory,
+	private String defaultOutputPrefix;
+//	private boolean outputMultipleFiles;
 	private String outputFileSuffix;
 	private ArrayList<String> processedItems;
     private String masterFileDirectory;
@@ -38,14 +39,6 @@ public class XliffEngine {
 
     private void setStringsList(List<String> stringsList) {
         this.stringsList = stringsList;
-    }
-
-    private String getOutputFileName() {
-        return outputFileName;
-    }
-
-    private void setOutputFileName(String outputFileName) {
-        this.outputFileName = outputFileName;
     }
 
 	private List<String> getOutputPrefixes() {
@@ -62,30 +55,6 @@ public class XliffEngine {
 
 	private void setDefaultOutputPrefix(String defaultOutputPrefix) {
 		this.defaultOutputPrefix = defaultOutputPrefix;
-	}
-
-	private String getOutputDirectory() {
-		return outputDirectory;
-	}
-
-	private void setOutputDirectory(String outputDirectory) {
-		this.outputDirectory = outputDirectory;
-	}
-
-	private boolean isOutputMultipleFiles() {
-		return outputMultipleFiles;
-	}
-
-	private void setOutputMultipleFiles(boolean outputMultipleFiles) {
-		this.outputMultipleFiles = outputMultipleFiles;
-	}
-
-	public String getOutputFileSuffix() {
-		return outputFileSuffix;
-	}
-
-	public void setOutputFileSuffix(String outputFileSuffix) {
-		this.outputFileSuffix = outputFileSuffix;
 	}
 
     public ArrayList<String> getProcessedItems() {
@@ -114,11 +83,8 @@ public class XliffEngine {
 
     public XliffEngine(XConfig config) {
 	    setMasterFilesList(new ArrayList<Xliff>());
-        setOutputMultipleFiles(config.isOutputMultiFile());
-        setOutputDirectory(config.getOutputDirectory());
         setDefaultOutputPrefix(config.getDefaultOutputPrefix());
         setOutputPrefixes(config.getOutputPrefixes());
-        setOutputFileSuffix(config.getOutputFileSuffix());
         setMasterFileDirectory(config.getMasterFileDirectory());
         setMasterFileSuffix(config.getMasterFileSuffix());
     }
@@ -127,24 +93,6 @@ public class XliffEngine {
         setStringsList(strings);
         return this;
     }
-
-	public boolean dumpToFile() {
-		this.setProcessedItems(new ArrayList<String>());
-		boolean result = true;
-		try {
-			for (String prefix : this.getOutputPrefixes()) {
-				processForPrefix(prefix, getStringsList().listIterator(0));
-			}
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-			result = false;
-		} catch (TransformerException tfe) {
-			tfe.printStackTrace();
-			result = false;
-		}
-
-		return result;
-	}
 
 	private void processForPrefix(String prefix, ListIterator<String> itemsIterator) throws TransformerException,
 			ParserConfigurationException {
@@ -194,10 +142,10 @@ public class XliffEngine {
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		DOMSource source = new DOMSource(doc);
-		String fileAbsPath = this.getOutputDirectory();
-		fileAbsPath += (this.getOutputDirectory().endsWith(File.separator)) ? "" : File.separator;
+		String fileAbsPath = this.getMasterFileDirectory();
+		fileAbsPath += (this.getMasterFileDirectory().endsWith(File.separator)) ? "" : File.separator;
 		fileAbsPath += prefix;
-		fileAbsPath += this.getOutputFileSuffix();
+		fileAbsPath += this.getMasterFileDirectory();
 		StreamResult sresult = new StreamResult(System.out);
 		if (fileAbsPath.compareTo("") != 0) {
 			sresult = new StreamResult(new File(fileAbsPath));

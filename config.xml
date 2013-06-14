@@ -7,16 +7,12 @@
     <included-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/</included-directory>
     <included-directory>/home/manuel/src/tlm-backend.localhost/trunk/src/</included-directory>
     <excluded-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/Bootstrap/</excluded-directory>
-    <output-multiple-files>false</output-multiple-files>
-    <output-tmp-directory>/home/manuel/src/transcan/</output-tmp-directory>
-    <output-single-file>prueba.xlf</output-single-file>
     <output-prefix>global</output-prefix>
     <output-prefix>object</output-prefix>
     <output-prefix>feed</output-prefix>
     <output-prefix>page</output-prefix>
     <output-prefix>tokens</output-prefix>
     <output-prefix default="true">other</output-prefix>
-    <output-file-suffix>.en-DEV.xlf</output-file-suffix>
     <master-file-directory>/home/manuel/src/transcan/files</master-file-directory>
     <master-file-suffix>.en-DEV.xlf</master-file-suffix>
 </config>
