@@ -1,7 +1,5 @@
 package com.facelift;
 
-import org.w3c.dom.Document;
-
 import javax.xml.xpath.XPathExpressionException;
 import java.util.List;
 import java.util.ListIterator;

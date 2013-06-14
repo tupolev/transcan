@@ -1,12 +1,9 @@
 package com.facelift;
 
-import com.sun.javafx.collections.transformation.SortedList;
-import com.sun.org.apache.xml.internal.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,7 +16,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class Xliff {
