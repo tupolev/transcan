@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <config>
-    <input-pattern capture-group="2">([\{\{][\s*][\"|\'])([\w|\.|\-]+)([\"|\'][\s*][\|][\s*]trans[\s*][\}\}])</input-pattern>
-    <!--<input-pattern capture-group="2">([\{\{][\s*][\"|\'])(.+)([\"|\'][\s*][\|][\s*]trans[\s*][\}\}])</input-pattern>-->
-    <!--<input-pattern capture-group="2">(_\([\'|\"])(.+)([\'|\"]\))</input-pattern>-->
+    <input-pattern capture-group="2">([\{\{][\s]*[\"|\'])([\w|\.|\-|[^\s]]+)([\"|\'][\s]*[\|][\s]*trans[\s]*[\}\}])</input-pattern>
+    <!--<input-pattern capture-group="2">([\{\{][\s*][\"|\'])([\w|\.|\-]+)([\"|\'][\s*][\|][\s*]trans[\s*][\}\}])</input-pattern>-->
     <input-pattern capture-group="2">([_\(][\'|\"])([\w|\.|\-]+)([\'|\"]\))</input-pattern>
-    <included-file-extensions>php,js,html</included-file-extensions>
+    <included-file-extensions>php,js,html,twig</included-file-extensions>
     <excluded-file-extensions>yml,txt,rst,xml</excluded-file-extensions>
     <included-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/</included-directory>
     <included-directory>/home/manuel/src/tlm-backend.localhost/trunk/src/</included-directory>
     <excluded-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/Bootstrap/</excluded-directory>
     <output-prefix>global</output-prefix>
-    <output-prefix>main</output-prefix>
     <output-prefix>object</output-prefix>
+    <output-prefix>filterbar</output-prefix>
     <output-prefix>page_dashboard</output-prefix>
     <output-prefix>page_feed</output-prefix>
     <output-prefix>credentials_list</output-prefix>
     <output-prefix>credentials_details</output-prefix>
-    <output-prefix default="true" savetofile="other.en-DEV.txt">other</output-prefix>
-    <master-file-directory>/home/manuel/src/transcan/files</master-file-directory>
+    <output-prefix default="true" savetofile="other.en-DEV.xml">other</output-prefix>
+    <master-file-directory>/home/manuel/src/tlm-backend.localhost/trunk/src/Facelift/TlmSyngularBundle/Resources/translations</master-file-directory>
     <master-file-suffix>.en-DEV.xlf</master-file-suffix>
 </config>
