@@ -20,8 +20,10 @@ public class XConfig {
 	private List<FocusedPattern> inputPatterns,outputPatterns;
     private String masterFileDirectory;
     private String masterFileSuffix;
+	private boolean saveDefaultMasterList;
+	private String defaultMasterListFilename;
 
-    public List<String> getIncludedFileExtensions() {
+	public List<String> getIncludedFileExtensions() {
         return includedFileExtensions;
     }
 
@@ -101,13 +103,30 @@ public class XConfig {
         this.masterFileSuffix = masterFileSuffix;
     }
 
+
+	public boolean getSaveDefaultMasterList() {
+		return saveDefaultMasterList;
+	}
+
+	public void setSaveDefaultMasterList(boolean saveDefaultMasterList) {
+		this.saveDefaultMasterList = saveDefaultMasterList;
+	}
+
+	public void setDefaultMasterListFilename(String defaultMasterListFilename) {
+		this.defaultMasterListFilename = defaultMasterListFilename;
+	}
+
+	public String getDefaultMasterListFilename() {
+		return defaultMasterListFilename;
+	}
+
 	public XConfig() throws Exception {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		Document doc = docBuilder.parse(new File(_configFile));
 
 		doc.getDocumentElement().normalize();
-		System.out.println(doc.getDocumentElement().getTagName().toString() + " tree loaded");
+		//System.out.println(doc.getDocumentElement().getTagName().toString() + " tree loaded");
 
 
 		try {
@@ -128,7 +147,7 @@ public class XConfig {
 		if (tags.getLength() == 0) throw new Exception("No input patterns configured");
 		setInputPatterns(new ArrayList<FocusedPattern>());
 		for (int i = 0; i < tags.getLength(); i++) {
-			Element pattern = (Element)tags.item(i);
+			Element pattern = (Element) tags.item(i);
 			String cg = pattern.getAttribute("capture-group");
 			FocusedPattern fp = new FocusedPattern(
 					Integer.valueOf(cg),
@@ -142,7 +161,7 @@ public class XConfig {
 		for (int i = 0; i < tags.getLength(); i++) {
 			FocusedPattern fp = new FocusedPattern(
 					Integer.getInteger(
-							((Element)tags.item(i)).getAttribute("capture-group")
+							((Element) tags.item(i)).getAttribute("capture-group")
 					),
 					Pattern.compile(tags.item(i).getFirstChild().getNodeValue().toString())
 			);
@@ -166,19 +185,22 @@ public class XConfig {
 		setOutputPrefixes(new ArrayList<String>());
 		for (int i = 0; i < tags.getLength(); i++) {
 			getOutputPrefixes().add(tags.item(i).getFirstChild().getNodeValue().toString());
-			if (tags.item(i).hasAttributes() && ((Element)tags.item(i)).getAttribute("default").compareTo("true") == 0
-					) {
+			if (tags.item(i).hasAttributes() && ((Element) tags.item(i)).getAttribute("default").compareTo("true") == 0) {
 				setDefaultOutputPrefix(tags.item(i).getFirstChild().getNodeValue().toString());
+				if (((Element) tags.item(i)).hasAttribute("savetofile")
+						&& ((Element) tags.item(i)).getAttribute("savetofile").compareTo("") != 0) {
+					setSaveDefaultMasterList(true);
+					setDefaultMasterListFilename(((Element) tags.item(i)).getAttribute("savetofile").toString());
+				}
 			}
 		}
 
-        tags = doc.getElementsByTagName("master-file-directory");
-        if (tags.getLength() == 0) throw new Exception("No master file directory configured");
-        setMasterFileDirectory(tags.item(0).getFirstChild().getNodeValue());
+		tags = doc.getElementsByTagName("master-file-directory");
+		if (tags.getLength() == 0) throw new Exception("No master file directory configured");
+		setMasterFileDirectory(tags.item(0).getFirstChild().getNodeValue());
 
-        tags = doc.getElementsByTagName("master-file-suffix");
-        if (tags.getLength() == 0) throw new Exception("No master file suffix configured");
-        setMasterFileSuffix(tags.item(0).getFirstChild().getNodeValue());
-
-    }
+		tags = doc.getElementsByTagName("master-file-suffix");
+		if (tags.getLength() == 0) throw new Exception("No master file suffix configured");
+		setMasterFileSuffix(tags.item(0).getFirstChild().getNodeValue());
+	}
 }

@@ -83,7 +83,6 @@ public class XScanner {
         while (fileIterator.hasNext()) {
             try {
                 String fileItem = fileIterator.next();
-//                System.out.println("Scanning file: " + fileItem);
                 String fileContent = new Scanner(new File(fileItem)).useDelimiter("\0").next();
                 loopThroughPatterns(fileContent);
             } catch (NoSuchElementException e) {

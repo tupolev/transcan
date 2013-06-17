@@ -32,6 +32,8 @@ public class XliffEngine {
     private String masterFileSuffix;
     private List<Xliff> masterFilesList;
 	private Xliff defaultMasterFile;
+	private String defaultMasterFilename;
+	private boolean saveDefaultMasterList;
 
 	private List<String> getStringsList() {
         return stringsList;
@@ -87,6 +89,8 @@ public class XliffEngine {
         setOutputPrefixes(config.getOutputPrefixes());
         setMasterFileDirectory(config.getMasterFileDirectory());
         setMasterFileSuffix(config.getMasterFileSuffix());
+	    setSaveDefaultMasterList(config.getSaveDefaultMasterList());
+		setDefaultMasterFilename(config.getDefaultMasterListFilename());
     }
 
 	public XliffEngine loadStrings(List<String> strings) {
@@ -111,7 +115,7 @@ public class XliffEngine {
 		fileElement.setAttribute("source-language", "en-DEV");
 		fileElement.setAttribute("target-language", "en-DEV");
 		fileElement.setAttribute("datatype", "plaintext");
-		fileElement.setAttribute("original", "file.ext");
+		fileElement.setAttribute("original", prefix);
 		xliffElement.appendChild(fileElement);
 
 		Element bodyElement = doc.createElement("body");
@@ -159,20 +163,24 @@ public class XliffEngine {
 		String suffix = getMasterFileSuffix();
 		String dir = getMasterFileDirectory();
 		if (new File(dir).isDirectory()) {
-	        File masterFile;
-	        for(String prefix : prefixes) {
-		        masterFile = new File(dir.concat(File.separator).concat(prefix).concat(suffix));
-		        if (masterFile.getName().startsWith(getDefaultOutputPrefix() + ".")) {
-			        loadDefaultMasterFile(masterFile);
-		        } else {
-			        loadMasterFile(masterFile);
-		        }
-	        }
-        } else {
+			File masterFile;
+			for (String prefix : prefixes) {
+				masterFile = new File(dir.concat(File.separator).concat(prefix).concat(suffix));
+				if (masterFile.getName().startsWith(getDefaultOutputPrefix() + ".")) {
+					loadDefaultMasterFile(
+							(getSaveDefaultMasterList())
+								? new File(dir.concat(File.separator).concat(getDefaultMasterFilename()))
+								: masterFile
+					);
+				} else {
+					loadMasterFile(masterFile);
+				}
+			}
+		} else {
 			System.out.println("ERROR: Master directory " + dir + " does not exist.");
 		}
-	    return this;
-    }
+		return this;
+	}
 
 	private void loadDefaultMasterFile(File masterFile) throws IOException, SAXException, ParserConfigurationException {
 		String[] prefix = masterFile.getName().split("\\.");
@@ -200,5 +208,21 @@ public class XliffEngine {
 
 	public Xliff getDefaultMasterFile() {
 		return defaultMasterFile;
+	}
+
+	public String getDefaultMasterFilename() {
+		return defaultMasterFilename;
+	}
+
+	public void setDefaultMasterFilename(String defaultMasterFilename) {
+		this.defaultMasterFilename = defaultMasterFilename;
+	}
+
+	public boolean getSaveDefaultMasterList() {
+		return saveDefaultMasterList;
+	}
+
+	public void setSaveDefaultMasterList(boolean saveDefaultMasterList) {
+		this.saveDefaultMasterList = saveDefaultMasterList;
 	}
 }

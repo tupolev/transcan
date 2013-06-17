@@ -170,11 +170,11 @@ public class Xliff {
 	private void debugNodeList(List<Node> list) {
 		for(int i=0, len = list.size(); i<len; i++) {
 			Element e = (Element)list.get(i);
-			System.out.println(
-					e.getAttribute("id")
-							+ " -> " +
-							e.getElementsByTagName("source").item(0).getFirstChild().getNodeValue()
-			);
+//			System.out.println(
+//					e.getAttribute("id")
+//							+ " -> " +
+//							e.getElementsByTagName("source").item(0).getFirstChild().getNodeValue()
+//			);
 		}
 
 	}
@@ -197,7 +197,6 @@ public class Xliff {
 		String fileAbsPath = getFile().getAbsolutePath();
 		StreamResult sresult = new StreamResult(System.out);
 		transformer.transform(source, sresult);
-		System.out.println("File " + fileAbsPath + " " + "saved!");
 	}
 
 	public void write() throws TransformerException {
@@ -229,7 +228,7 @@ public class Xliff {
 			setTree(getEmptyTree());
 		}
 		getTree().getDocumentElement().normalize();
-		System.out.println(getTree().getDocumentElement().getTagName().toString() + " tree loaded");
+		//System.out.println(getTree().getDocumentElement().getTagName().toString() + " tree loaded");
 		return this;
 	}
 
@@ -247,7 +246,7 @@ public class Xliff {
 		fileElement.setAttribute("source-language", "en-DEV");
 		fileElement.setAttribute("target-language", "en-DEV");
 		fileElement.setAttribute("datatype", "plaintext");
-		fileElement.setAttribute("original", "file.ext");
+		fileElement.setAttribute("original", !getPrefix().isEmpty() ? getPrefix() : "file.ext");
 		xliffElement.appendChild(fileElement);
 
 		Element bodyElement = doc.createElement("body");

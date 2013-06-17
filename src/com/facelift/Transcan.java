@@ -21,7 +21,11 @@ public class Transcan {
 	        for(Xliff item : merger.getUpdatedMasterLists()) {
 		        item.write(Xliff.DEST_FILE);
 	        }
-	        merger.getDefaultMasterFile().write(Xliff.DEST_FILE);
+	        if (config.getSaveDefaultMasterList()) {
+		        merger.getDefaultMasterFile().write(Xliff.DEST_FILE);
+	        } else {
+		        merger.getDefaultMasterFile().write(Xliff.DEST_CONSOLE);
+	        }
 //		} catch (Exception e) {
 //            e.printStackTrace();
 //        }
