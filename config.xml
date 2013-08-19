@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <config>
     <input-pattern capture-group="2">([\{\{][\s]*[\"|\'])([\w|\.|\-|[^\s]]+)([\"|\'][\s]*[\|][\s]*trans[\s]*[\}\}])</input-pattern>
-    <!--<input-pattern capture-group="2">([\{\{][\s*][\"|\'])([\w|\.|\-]+)([\"|\'][\s*][\|][\s*]trans[\s*][\}\}])</input-pattern>-->
     <input-pattern capture-group="2">([_\(][\'|\"])([\w|\.|\-]+)([\'|\"]\))</input-pattern>
     <included-file-extensions>php,js,html,twig</included-file-extensions>
     <excluded-file-extensions>yml,txt,rst,xml</excluded-file-extensions>
@@ -25,7 +24,6 @@
     <output-prefix>media</output-prefix>
     <output-prefix>post_template</output-prefix>
     <output-prefix default="true" savetofile="other.en-DEV.xml">other</output-prefix>
-    <!--<master-file-directory>/home/manuel/src/tlm-backend.localhost/trunk/src/Facelift/TlmSyngularBundle/Resources/translations</master-file-directory>-->
     <master-file-directory>/home/manuel/src/tlm-backend.localhost/trunk/src/FanActivator/TimelineManager/SyngularBundle/Resources/translations</master-file-directory>
     <master-file-suffix>.en-DEV.xlf</master-file-suffix>
 </config>
