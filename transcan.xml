@@ -83,7 +83,85 @@
   
   <!-- Modules -->
   
-  <import file="${basedir}/module_transcan.xml"/>
+  
+  <!-- Module transcan -->
+  
+  <dirname property="module.transcan.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.transcan" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.transcan" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.transcan" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.transcan" value="${compiler.args}"/>
+  
+  <property name="transcan.output.dir" value="${module.transcan.basedir}/out/production/transcan"/>
+  <property name="transcan.testoutput.dir" value="${module.transcan.basedir}/out/test/transcan"/>
+  
+  <path id="transcan.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="transcan.module.production.classpath">
+    <path refid="${module.jdk.classpath.transcan}"/>
+  </path>
+  
+  <path id="transcan.runtime.production.module.classpath">
+    <pathelement location="${transcan.output.dir}"/>
+  </path>
+  
+  <path id="transcan.module.classpath">
+    <path refid="${module.jdk.classpath.transcan}"/>
+    <pathelement location="${transcan.output.dir}"/>
+  </path>
+  
+  <path id="transcan.runtime.module.classpath">
+    <pathelement location="${transcan.testoutput.dir}"/>
+    <pathelement location="${transcan.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.transcan">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.transcan">
+    <patternset refid="excluded.from.module.transcan"/>
+  </patternset>
+  
+  <path id="transcan.module.sourcepath">
+    <dirset dir="${module.transcan.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.transcan" depends="compile.module.transcan.production,compile.module.transcan.tests" description="Compile module transcan"/>
+  
+  <target name="compile.module.transcan.production" description="Compile module transcan; production classes">
+    <mkdir dir="${transcan.output.dir}"/>
+    <javac destdir="${transcan.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.transcan}/javac">
+      <compilerarg line="${compiler.args.transcan}"/>
+      <bootclasspath refid="transcan.module.bootclasspath"/>
+      <classpath refid="transcan.module.production.classpath"/>
+      <src refid="transcan.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.transcan"/>
+    </javac>
+    
+    <copy todir="${transcan.output.dir}">
+      <fileset dir="${module.transcan.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.transcan.tests" depends="compile.module.transcan.production" description="compile module transcan; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.transcan" description="cleanup module">
+    <delete dir="${transcan.output.dir}"/>
+    <delete dir="${transcan.testoutput.dir}"/>
+  </target>
   
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
@@ -91,7 +169,17 @@
   
   <target name="clean" depends="clean.module.transcan" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.transcan" description="build all modules"/>
-  
+  <target name="build.modules" depends="init, clean, compile.module.transcan, build-jar"
+          description="build all modules"/>
+
+  <target name="build-jar">
+  <jar destfile="transcan.jar"
+       basedir="${basedir}/out/production/transcan">
+       <manifest>
+        <attribute name="Main-Class" value="com.facelift.Transcan"/>
+       </manifest>
+  </jar>
+  </target>
+
   <target name="all" depends="build.modules" description="build all"/>
 </project>
