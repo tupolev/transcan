@@ -9,6 +9,7 @@
    -->
   
   <!-- Compiler options -->
+  
   <property name="compiler.debug" value="on"/>
   <property name="compiler.generate.no.warnings" value="off"/>
   <property name="compiler.args" value=""/>
@@ -57,32 +58,28 @@
   
   <!-- JDK definitions -->
   
-  <property name="jdk.bin.1.7" value="${jdk.home.1.7}/bin"/>
-  <path id="jdk.classpath.1.7">
-    <fileset dir="${jdk.home.1.7}">
+  <property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin"/>
+  <path id="jdk.classpath.1.6">
+    <fileset dir="${jdk.home.1.6}">
       <include name="jre/lib/rt.jar"/>
       <include name="jre/lib/deploy.jar"/>
       <include name="jre/lib/management-agent.jar"/>
       <include name="jre/lib/plugin.jar"/>
       <include name="jre/lib/jce.jar"/>
-      <include name="jre/lib/jfr.jar"/>
       <include name="jre/lib/jsse.jar"/>
-      <include name="jre/lib/jfxrt.jar"/>
       <include name="jre/lib/charsets.jar"/>
       <include name="jre/lib/javaws.jar"/>
       <include name="jre/lib/resources.jar"/>
       <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/sunec.jar"/>
       <include name="jre/lib/ext/sunjce_provider.jar"/>
       <include name="jre/lib/ext/sunpkcs11.jar"/>
       <include name="jre/lib/ext/localedata.jar"/>
-      <include name="jre/lib/ext/zipfs.jar"/>
     </fileset>
   </path>
   
-  <property name="project.jdk.home" value="${jdk.home.1.7}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.7}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.7"/>
+  <property name="project.jdk.home" value="${jdk.home.1.6}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.6}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.6"/>
   
   <!-- Modules -->
   
@@ -94,16 +91,7 @@
   
   <target name="clean" depends="clean.module.transcan" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.transcan, build-jar" description="build all modules"/>
+  <target name="build.modules" depends="init, clean, compile.module.transcan" description="build all modules"/>
   
   <target name="all" depends="build.modules" description="build all"/>
-
-<target name="build-jar">
-<jar destfile="transcan.jar"
-     basedir="${basedir}/out/production/transcan">
-     <manifest>
-      <attribute name="Main-Class" value="com.facelift.Transcan"/>
-     </manifest>
-</jar>
-</target>
 </project>
