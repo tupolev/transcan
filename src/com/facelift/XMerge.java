@@ -42,24 +42,32 @@ public class XMerge {
 	}
 
 	private Xliff messageBelongsToList(String messageKey) {
-		Xliff targetList = null;
-		int pos = messageKey.indexOf(".");
-		String prefix;
-		if (pos >= 0)
-			prefix = messageKey.substring(0,pos);
-		else
-			prefix = "other";
-		boolean found = false;
-		Xliff item = null;
-		ListIterator<Xliff> it = getMasterFiles().listIterator();
-		while(!found && it.hasNext()) {
-			item = it.next();
-			if (item.getPrefix().equals(prefix)) {
-				found = true;
-				break;
+		String projectPrefix = getConfig().getProjectPrefix();
+
+		String[] parts = messageKey.split("\\.");
+		if (parts.length > 1 && parts[0].equals(projectPrefix)) {
+			Xliff targetList = null;
+			messageKey = messageKey.replace(projectPrefix + ".", "");
+			int pos = messageKey.indexOf(".");
+			String prefix;
+			if (pos >= 0)
+				prefix = messageKey.substring(0,pos);
+			else
+				prefix = "other";
+			boolean found = false;
+			Xliff item = null;
+			ListIterator<Xliff> it = getMasterFiles().listIterator();
+			while(!found && it.hasNext()) {
+				item = it.next();
+				if (item.getPrefix().equals(prefix)) {
+					found = true;
+					break;
+				}
 			}
+			return (found) ? item : getDefaultMasterFile();
+		} else {
+			return getDefaultMasterFile();
 		}
-		return (found) ? item : getDefaultMasterFile();
 	}
 
 	public void processLoadedStrings() throws XPathExpressionException {

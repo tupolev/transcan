@@ -22,7 +22,8 @@ import java.util.ListIterator;
 
 public class XliffEngine {
 
-    private List<String> stringsList, outputPrefixes;
+	private String projectName, projectPrefix, projectPrefixShort;
+	private List<String> stringsList, outputPrefixes;
 //    private String outputFileName, outputDirectory,
 	private String defaultOutputPrefix;
 //	private boolean outputMultipleFiles;
@@ -34,6 +35,30 @@ public class XliffEngine {
 	private Xliff defaultMasterFile;
 	private String defaultMasterFilename;
 	private boolean saveDefaultMasterList;
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getProjectPrefix() {
+		return projectPrefix;
+	}
+
+	public void setProjectPrefix(String projectPrefix) {
+		this.projectPrefix = projectPrefix;
+	}
+
+	public String getProjectPrefixShort() {
+		return projectPrefixShort;
+	}
+
+	public void setProjectPrefixShort(String projectPrefixShort) {
+		this.projectPrefixShort = projectPrefixShort;
+	}
 
 	private List<String> getStringsList() {
         return stringsList;
@@ -159,6 +184,7 @@ public class XliffEngine {
 	}
 
 	public XliffEngine loadMasterFiles() throws ParserConfigurationException, SAXException, IOException {
+		String projectPrefix = getProjectPrefix();
 		List<String> prefixes = getOutputPrefixes();
 		String suffix = getMasterFileSuffix();
 		String dir = getMasterFileDirectory();

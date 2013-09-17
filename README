@@ -12,6 +12,6 @@ Build:
 Clone the project and build using "ant -f transcan.xml" or just download the file "transcan.jar".
 
 Run:
-java -jar transcan.jar
+java -jar transcan.jar <project_config_xml_file>
 
-It will load the configuration from the mandatory config.xml file.
+It will load the configuration from the mandatory project config xml file.

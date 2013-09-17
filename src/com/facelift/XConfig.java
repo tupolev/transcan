@@ -13,7 +13,8 @@ import java.util.regex.Pattern;
 
 public class XConfig {
     private Document doc;
-    private String _configFile = "config.xml";
+//    private String _configFile = "config_project1.xml";
+	private String projectName, projectPrefix, projectPrefixShort;
 	private List<String> outputPrefixes;
 	private String defaultOutputPrefix;
 	private List<String> includedFileExtensions, excludedFileExtensions,includedDirectories,excludedDirectories;
@@ -22,6 +23,30 @@ public class XConfig {
     private String masterFileSuffix;
 	private boolean saveDefaultMasterList;
 	private String defaultMasterListFilename;
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getProjectPrefix() {
+		return projectPrefix;
+	}
+
+	public void setProjectPrefix(String projectPrefix) {
+		this.projectPrefix = projectPrefix;
+	}
+
+	public String getProjectPrefixShort() {
+		return projectPrefixShort;
+	}
+
+	public void setProjectPrefixShort(String projectPrefixShort) {
+		this.projectPrefixShort = projectPrefixShort;
+	}
 
 	public List<String> getIncludedFileExtensions() {
         return includedFileExtensions;
@@ -120,13 +145,33 @@ public class XConfig {
 		return defaultMasterListFilename;
 	}
 
-	public XConfig() throws Exception {
+	public XConfig(String configFile) throws Exception {
+
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		Document doc = docBuilder.parse(new File(_configFile));
-
+		Document doc;
+		if (configFile.isEmpty()) {
+			throw new Exception("Error loading project: No config file specified.");
+		} else {
+			doc = docBuilder.parse(new File(configFile));
+		}
 		doc.getDocumentElement().normalize();
 		//System.out.println(doc.getDocumentElement().getTagName().toString() + " tree loaded");
+
+		NodeList project;
+		try {
+			project = doc.getElementsByTagName("project-name");
+			if (project.getLength() == 0) throw new Exception("No project name found");
+			setProjectName(project.item(0).getFirstChild().getNodeValue());
+			project = doc.getElementsByTagName("project-prefix");
+			if (project.getLength() == 0) throw new Exception("No project prefix found");
+			setProjectPrefix(project.item(0).getFirstChild().getNodeValue());
+			project = doc.getElementsByTagName("master-file-suffix");
+			if (project.getLength() == 0) throw new Exception("No project short prefix");
+			setProjectPrefixShort(project.item(0).getFirstChild().getNodeValue());
+		} catch (Exception ex) {
+			throw new Exception("Error loading project details from config file." + ex.getMessage());
+		}
 
 
 		try {
@@ -134,13 +179,13 @@ public class XConfig {
 			String[] list = n.split(",");
 			setIncludedFileExtensions(Arrays.asList(list));
 		} catch (Exception ex) {
-			throw new Exception("Error loading included-file-extensions section from config.xml file." + ex.getMessage());
+			throw new Exception("Error loading included-file-extensions section from config file." + ex.getMessage());
 		}
 
 		try {
 			setExcludedFileExtensions(Arrays.asList(doc.getElementsByTagName("excluded-file-extensions").item(0).getFirstChild().getNodeValue().toString().split(",")));
 		} catch (Exception ex) {
-			throw new Exception("Error loading excluded-file-extensions section from config.xml file");
+			throw new Exception("Error loading excluded-file-extensions section from config file");
 		}
 
 		NodeList tags = doc.getElementsByTagName("input-pattern");
@@ -149,24 +194,26 @@ public class XConfig {
 		for (int i = 0; i < tags.getLength(); i++) {
 			Element pattern = (Element) tags.item(i);
 			String cg = pattern.getAttribute("capture-group");
+			//here prepend the project prefix to the pattern text
 			FocusedPattern fp = new FocusedPattern(
 					Integer.valueOf(cg),
-					Pattern.compile(tags.item(i).getFirstChild().getNodeValue().toString())
-			);
+					Pattern.compile(tags.item(i).getFirstChild().getNodeValue().toString()));
 			getInputPatterns().add(fp);
 		}
 
-		tags = doc.getElementsByTagName("output-pattern");
-		setOutputPatterns(new ArrayList<FocusedPattern>());
-		for (int i = 0; i < tags.getLength(); i++) {
-			FocusedPattern fp = new FocusedPattern(
-					Integer.getInteger(
-							((Element) tags.item(i)).getAttribute("capture-group")
-					),
-					Pattern.compile(tags.item(i).getFirstChild().getNodeValue().toString())
-			);
-			getOutputPatterns().add(fp);
-		}
+//		tags = doc.getElementsByTagName("output-pattern");
+//		setOutputPatterns(new ArrayList<FocusedPattern>());
+//		for (int i = 0; i < tags.getLength(); i++) {
+//			FocusedPattern fp = new FocusedPattern(
+//					Integer.getInteger(
+//							((Element) tags.item(i)).getAttribute("capture-group")
+//					),
+//					Pattern.compile(
+//						getProjectPrefix() + "." + tags.item(i).getFirstChild().getNodeValue().toString()
+//					)
+//			);
+//			getOutputPatterns().add(fp);
+//		}
 
 		tags = doc.getElementsByTagName("included-directory");
 		if (tags.getLength() == 0) throw new Exception("No included directories configured");
@@ -193,6 +240,18 @@ public class XConfig {
 					setDefaultMasterListFilename(((Element) tags.item(i)).getAttribute("savetofile").toString());
 				}
 			}
+		}
+		setOutputPatterns(new ArrayList<FocusedPattern>());
+		for (int i = 0; i < tags.getLength(); i++) {
+			FocusedPattern fp = new FocusedPattern(
+					Integer.getInteger(
+							((Element) tags.item(i)).getAttribute("capture-group")
+					),
+					Pattern.compile(
+							getProjectPrefix() + "." + tags.item(i).getFirstChild().getNodeValue().toString()
+					)
+			);
+			getOutputPatterns().add(fp);
 		}
 
 		tags = doc.getElementsByTagName("master-file-directory");

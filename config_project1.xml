@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+    <project-name>transcan-project1</project-name>
+    <project-prefix>project1</project-prefix>
+    <project-prefix-short>p1</project-prefix-short>
+    <input-pattern capture-group="2">([\{\{][\s]*[\"|\'])([\w|\.|\-|[^\s]]+)([\"|\'][\s]*[\|][\s]*translate[\s]*[\}\}])</input-pattern>
+    <input-pattern capture-group="2">([\$translate\(][\'|\"])([\w|\.|\-]+)([\'|\"]\))</input-pattern>
+    <included-file-extensions>php,js,html,twig</included-file-extensions>
+    <excluded-file-extensions>yml,txt,rst,xml,less</excluded-file-extensions>
+    <included-directory>input_files/</included-directory>
+    <excluded-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/Public/js/</excluded-directory>
+    <output-prefix>global</output-prefix>
+    <output-prefix>object</output-prefix>
+    <output-prefix>settings</output-prefix>
+    <output-prefix>backend</output-prefix>
+    <output-prefix>filterbar</output-prefix>
+    <output-prefix>page_dashboard</output-prefix>
+    <output-prefix>page_feed</output-prefix>
+    <output-prefix>credentials_list</output-prefix>
+    <output-prefix>credentials_details</output-prefix>
+    <output-prefix>tags_list</output-prefix>
+    <output-prefix>page_posts</output-prefix>
+    <output-prefix>page_groups</output-prefix>
+    <output-prefix>media</output-prefix>
+    <output-prefix>post_template</output-prefix>
+    <output-prefix>tag_keyword</output-prefix>
+    <output-prefix default="true" savetofile="other.en-DEV.xml">other</output-prefix>
+    <!--<master-file-directory>../../src/FanActivator/TimelineManager/SyngularBundle/Resources/translations/project1</master-file-directory>-->
+    <master-file-directory>files/project1</master-file-directory>
+    <master-file-suffix>.en-DEV.xlf</master-file-suffix>
+</config>

@@ -31,13 +31,22 @@ public class FocusedPattern {
 	}
 
 	public List<String> matchAndCapture(String content) {
-		Matcher m = getPattern().matcher(content);
 		ArrayList<String> captures = new ArrayList<String>();
-		while (m.find()) {
 
-			if (!captures.contains(m.group(getCaptureGroup()))) {
-				captures.add(m.group(getCaptureGroup()));
+		try{
+			Matcher m = getPattern().matcher(content);
+			while (m.find()) {
+				if (getCaptureGroup() < (Integer)m.groupCount()) {
+					String grp = m.group(getCaptureGroup());
+					if (!captures.contains(grp)) {
+						captures.add(grp);
+					}
+				}
+
 			}
+
+		} catch (Exception ex) {
+			System.err.println("Warning: While scanning " + content + " for " + getPattern().toString());
 		}
 		return captures;
 	}
