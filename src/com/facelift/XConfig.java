@@ -248,7 +248,7 @@ public class XConfig {
 							((Element) tags.item(i)).getAttribute("capture-group")
 					),
 					Pattern.compile(
-							getProjectPrefix() + "." + tags.item(i).getFirstChild().getNodeValue().toString()
+							getProjectPrefix() + "\\." + tags.item(i).getFirstChild().getNodeValue().toString()
 					)
 			);
 			getOutputPatterns().add(fp);

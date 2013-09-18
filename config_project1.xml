@@ -9,21 +9,8 @@
     <excluded-file-extensions>yml,txt,rst,xml,less</excluded-file-extensions>
     <included-directory>input_files/</included-directory>
     <excluded-directory>/home/manuel/src/tlm-backend.localhost/trunk/app/Resources/Public/js/</excluded-directory>
-    <output-prefix>global</output-prefix>
-    <output-prefix>object</output-prefix>
-    <output-prefix>settings</output-prefix>
-    <output-prefix>backend</output-prefix>
-    <output-prefix>filterbar</output-prefix>
     <output-prefix>page_dashboard</output-prefix>
-    <output-prefix>page_feed</output-prefix>
-    <output-prefix>credentials_list</output-prefix>
-    <output-prefix>credentials_details</output-prefix>
-    <output-prefix>tags_list</output-prefix>
-    <output-prefix>page_posts</output-prefix>
-    <output-prefix>page_groups</output-prefix>
-    <output-prefix>media</output-prefix>
     <output-prefix>post_template</output-prefix>
-    <output-prefix>tag_keyword</output-prefix>
     <output-prefix default="true" savetofile="other.en-DEV.xml">other</output-prefix>
     <!--<master-file-directory>../../src/FanActivator/TimelineManager/SyngularBundle/Resources/translations/project1</master-file-directory>-->
     <master-file-directory>files/project1</master-file-directory>

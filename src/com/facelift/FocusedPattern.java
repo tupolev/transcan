@@ -46,7 +46,7 @@ public class FocusedPattern {
 			}
 
 		} catch (Exception ex) {
-			System.err.println("Warning: While scanning " + content + " for " + getPattern().toString());
+			//System.err.println("Warning: While scanning " + content + " for " + getPattern().toString());
 		}
 		return captures;
 	}

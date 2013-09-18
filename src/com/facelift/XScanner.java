@@ -10,8 +10,9 @@ public class XScanner {
     protected List<String> fileList;
     protected List<String> outputList;
     protected List<FocusedPattern> inputPatternList;
+	private String projectPrefix;
 
-    private List<FocusedPattern> getInputPatternList() {
+	private List<FocusedPattern> getInputPatternList() {
         return inputPatternList;
     }
 
@@ -28,19 +29,23 @@ public class XScanner {
     }
 
     public List<String> getFilteredOutputList() {
-        for(int i=0; i<getOutputList().size(); i++) {
+	    List<String> filteredList = new ArrayList<String>();
+	    for(int i=0; i<getOutputList().size(); i++) {
             String item = getOutputList().get(i);
-            FocusedPattern pattern = null;
-            Iterator<FocusedPattern> it = getOutputPatternList().iterator();
-	        List<String> matches = new ArrayList<String>();
-	        while (it.hasNext()) {
-                pattern = it.next();
-	            matches = pattern.matchAndCapture(item);
-		        getOutputList().addAll(matches);
-	        }
+            if (item.startsWith(getProjectPrefix()+".")) {
+	            filteredList.add(item);
+	            FocusedPattern pattern = null;
+	            Iterator<FocusedPattern> it = getOutputPatternList().iterator();
+	            List<String> matches = new ArrayList<String>();
+	            while (it.hasNext()) {
+		            pattern = it.next();
+		            matches = pattern.matchAndCapture(item);
+		            filteredList.addAll(matches);
+	            }
+            }
 
         }
-        return getOutputList();
+        return filteredList;
     }
 
     private List<String> getFileList() {
@@ -66,17 +71,18 @@ public class XScanner {
         return this;
     }
 
-    public XScanner startEngine(List<String> fileList, List<FocusedPattern> inputPatternList,
-                                List<FocusedPattern> outputPatternList) throws Exception {
-        if (inputPatternList.size() == 0) {
-            throw new Exception();
-        }
-        this.setFileList(fileList);
-        this.setInputPatternList(inputPatternList);
-        this.setOutputPatternList(outputPatternList);
-        this.setOutputList(new ArrayList<String>());
-        return this;
-    }
+	public XScanner startEngine(List<String> fileList, List<FocusedPattern> inputPatternList,
+	                            List<FocusedPattern> outputPatternList, String projectPrefix) throws Exception {
+		if (inputPatternList.size() == 0) {
+			throw new Exception();
+		}
+		this.setFileList(fileList);
+		this.setInputPatternList(inputPatternList);
+		this.setOutputPatternList(outputPatternList);
+		this.setOutputList(new ArrayList<String>());
+		this.setProjectPrefix(projectPrefix);
+		return this;
+	}
 
     private void loopThroughFiles() throws Exception {
         Iterator<String> fileIterator = getFileList().iterator();
@@ -114,4 +120,12 @@ public class XScanner {
     public void doMagic() throws Exception {
         loopThroughFiles();
     }
+
+	public void setProjectPrefix(String projectPrefix) {
+		this.projectPrefix = projectPrefix;
+	}
+
+	public String getProjectPrefix() {
+		return projectPrefix;
+	}
 }

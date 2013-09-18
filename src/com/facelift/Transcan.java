@@ -21,7 +21,9 @@ public class Transcan {
             FileScanner fscanner = new FileScanner(config);
             //start xscanner engine
             XScanner scanner = new XScanner();
-            scanner.startEngine(fscanner.scanFileList(), config.getInputPatterns(), config.getOutputPatterns()).doMagic();
+            scanner.startEngine(fscanner.scanFileList(), config.getInputPatterns(), config.getOutputPatterns(),
+		            config.getProjectPrefix()
+		            ).doMagic();
 	        List<String> loadedStrings = scanner.getFilteredOutputList();
 	        XMerge merger = new XMerge(config, masterFiles, xliffEngine.getDefaultMasterFile(), loadedStrings);
 			merger.processLoadedStrings();
